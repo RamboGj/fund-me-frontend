@@ -1,10 +1,14 @@
 import './App.css'
 
 import profileImage from "@/assets/profile.png"
+import fundMeAbi from "@/contracts/abi/FundMe.json"
 import { LinkedinIcon } from "./components/atoms/LinkedinIcon"
 import { GithubIcon } from "./components/atoms/GithubIcon"
 
 import { ethers, Contract } from "ethers";
+import { FUND_ME_ADDRESS } from './contracts/addresses';
+import { getReadOnlyProvider } from './contracts/providers'
+import { useEffect } from 'react'
 
 function App() {
   async function handleConnectWallet() {
@@ -26,8 +30,43 @@ function App() {
     } else return  
   }
 
-  async function getContract() {
-    const contract = new Contract()
+  async function handleGetOwner() {
+    const readOnlyProvider = getReadOnlyProvider()
+
+    console.log("readOnlyProvider ->", readOnlyProvider)
+
+
+    const contract = new Contract(FUND_ME_ADDRESS, fundMeAbi.abi, readOnlyProvider)
+
+    const owner = await contract.getOwner()
+
+    console.log("owner ->", owner)
+  }
+
+  async function getOwner() {
+
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum)
+
+        console.log('provider ->', provider)
+        // const signer = await provider.getSigner()
+
+        const contract = new Contract(FUND_ME_ADDRESS, fundMeAbi.abi, provider)
+        console.log('contract ->', contract)
+  
+        const funder = await contract.getOwner()
+  
+        console.log("funder ->", funder)
+      } catch (err) {
+        console.log("ERR ->", err)
+      }
+   
+    } else {
+      console.log("exit ->")
+      return
+    }   
+
   }
 
   const SOCIAL_MEDIAS = [
@@ -70,6 +109,10 @@ function App() {
     },
   ]
 
+  useEffect(() => {
+    handleGetOwner()
+  }, [])
+
 
   return (
     <div className='wrapper'>
@@ -101,6 +144,7 @@ function App() {
           </ul>
 
           <button onClick={handleConnectWallet} className='actionButton'>Connect</button>
+          <button onClick={getOwner} className='actionButton'>View funder</button>
         </section>
 
         <section className='donators' id='donators'>
