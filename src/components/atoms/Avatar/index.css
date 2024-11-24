@@ -1,0 +1,22 @@
+.avatarWrapper {
+  width: 192px;
+  height: 192px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: white;
+}
+
+.avatar {
+  width: 176px;
+  height: 176px;
+
+  border-radius: 50%;
+
+  outline: 2px solid #0000001A;
+  outline-offset: -2px;
+}

@@ -1,0 +1,27 @@
+.icon svg {
+  fill: #333333 !important;
+  stroke: #333333 !important;
+
+  transition: fill 300ms, stroke 300ms;
+
+  &:hover {
+    opacity: 10%;
+  }
+}
+
+.socialMedias {
+  display: flex;
+  flex-direction: row;
+
+  gap: 0 18px;
+}
+
+.aboutMe {
+  max-width: 384px;
+  margin-top: -96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 1rem 0;
+}
